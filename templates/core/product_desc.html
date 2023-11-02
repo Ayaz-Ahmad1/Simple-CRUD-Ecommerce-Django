@@ -1,0 +1,134 @@
+{% load static %}
+{% load cart_template_tag %}
+
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Description Page</title>
+    <!--Roboto fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500">
+    <!--Boootstrap core CSS-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/release/v5.11.2/css/all.css">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet ">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/product_desc.css' %}">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+      <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container">
+      <div class="header-container d-flex align-items-center justify-content-between">
+        <div class="logo">
+          <h1 class="text-light"><a href="{% url 'index' %}"><span>Edentaste</span></a></h1>
+          <!-- Uncomment below if you prefer to use an image logo -->
+          <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        </div>
+
+        <nav id="navbar" class="navbar">
+      <ul>
+        {% if user.is_authenticated %}
+
+        <li><a class="nav-link scrollto active" href="{% url 'index' %}">Home</a></li>
+
+        <li><a class="nav-link scrollto active" href="{% url 'orderlist' %}">Cart&nbsp; &nbsp; <div style="color:red">{{request.user | cart_item_count }}</div></a></li>
+        {% endif %}
+
+        {% if user.is_superuser %}
+        <li><a class="nav-link scrollto active" href="{%url 'add_product'%}">Add Product</a></li>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <li class="dropdown">
+          <a class="nav-link scrollto active" href="{% url 'profile' %}"> 
+           {{user.username}} &nbsp;<img class="rounded-circle account-img login-img d-flex" style="width: 30px; height:30px" src="{{user.customer.profile_pic.url}}" alt="Profile pic">  &nbsp;&nbsp;</a>
+            
+         
+              <ul>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'user_logout' %}" style="color: red;">Logout</a></li>
+              </ul>
+          </li>
+
+        {% else %}
+        <li><a class="getstarted scrollto" href="{% url 'user_login' %}">Login</a></li>
+        <li><a class="getstarted scrollto" href="{% url 'user_register' %}">Register</a></li>
+        {% endif%}
+      </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+
+      </div><!-- End Header Container -->
+    </div>
+  </header><!-- End Header -->
+
+     <!-- ======= Breadcrumbs ======= -->
+     <section class="breadcrumbs">
+        <div class="container">
+  
+          <div class="d-flex justify-content-between align-items-center">
+            <h2>{{product.name.capitalize}}</h2>
+            <ol>
+              <li><a href="{% url 'index' %}">Home</a></li>
+              <li>{{product.name}}</li>
+            </ol>
+          </div>
+  
+        </div>
+      </section><!-- End Breadcrumbs -->
+  
+    <div class="container">
+        <div class="card">
+            <div class="container-fliud">
+                <div class="wrapper row">
+                    <div class="preview col-md-6">
+                        <div class="preview-pic tab-content">
+                            <div class="tab-pane active" id="pic-1"><img  src="{{product.product_image.url}}" alt="">
+                            </div>
+                        </div></div>
+
+                        <div class="details col-md-6"  style="align-items: center;">
+                            <div class="details row" >
+                                <div class="details row-md-6" >
+                                    <h3 class="product-title"></h3>
+                                    <h1 class="product-name">{{product.name.capitalize}}</h1>
+                                <p class="product-description">{{product.desc}}</p>
+                                <h4 class="price">Current price : <span> Rs. {{product.price}} / {{product.sale_in}}</span></h4>
+                                <div class="action">
+                                    {% if user.is_authenticated %}
+                                      {% if product.product_available_count %}
+                                      <a href="{% url 'add_to_cart' product.pk %}" class="add-to-cart btn btn-dark">Add to Cart</a>
+                                      {% else %}
+                                        <a href="" class="add-to-cart btn btn-dark">Product Out of Stock</a>
+                                    {% endif %}
+                                    {% else %}
+                                    <a class="getstarted scrollto btn btn-default" href="{% url 'user_login' %}">Login to add to cart</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+          <!-- Template Main JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascripts" src="{static 'vendor/bootstrap/js/bootstrap/min.js'}"></script>
+
+</html>
